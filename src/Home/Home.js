@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FormControl, InputGroup } from 'react-bootstrap';
+import { useDispatch, useSelector} from 'react-redux';
+import { addText } from '../redux/slices/textSlice';
 
 const Home = () => {
+    const dispatch = useDispatch()
+    const {id}=useSelector((state)=>state.counter)
     const [inputText,setInputText]=useState({})
     const [translateText,setTranslateText]=useState([])
     const [roverspraket,setRoverspraket]=useState('')
-   const [text,setText]=useState('')
+   
+
     
     const handleInput=e=>{
         const value=e.target.value;
@@ -16,7 +21,7 @@ const Home = () => {
     }
     const translate=data=>{
         
-        fetch('http://localhost:5000/translate/normal', {
+        fetch('https://lit-reaches-68954.herokuapp.com/normal', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
@@ -27,55 +32,68 @@ const Home = () => {
             .then(res => res.json())
             .then(result => {
                 if (result.insertedId) {
-                    alert('Direct')
-                    
-
+                    alert('Added to Database')
+                //    setId(result.insertedId)
+                   dispatch(addText(result.insertedId))
+                 
+              
                   
                 }
+                
               
             })
 
              
 
     }
-    useEffect(() => {
-        fetch('http://localhost:5000/normal')
-            .then(res => res.json())
-            .then(data => setTranslateText(data))
-    }, [])
+    // console.log(translateText)
+//  console.log(id)
+// const filter=translateText.find(rst=>rst._id===id)
+                
+// console.log(filter)
 
-if(translateText.english){
-    console.log(translateText.english)
-    let res=''
-    for(let i = 0; i <translateText.english.length; i++)
-    {    console.log(translateText.english)
-        // checking if character is vowel,
-        // if yes then append it as it is
-        if (translateText.english.charAt(i) === 'a' || translateText.english.charAt(i)=== 'e' ||
-        translateText.english.charAt(i) === 'i' || translateText.english.charAt(i) === 'o' ||
-            translateText.english.charAt(i) === 'u')
-        {
-            res = res + translateText.english.charAt(i);
-        }
+//     useEffect(() => {
+//         fetch(`http://localhost:5000/normal`)
+//             .then(res => res.json())
+//             .then(data => setTranslateText(data))
+//     }, [])
+
+                
+
+  
+
+// if(inputText.english){
+//     // console.log(translateText.english)
+//     let res=''
+//     for(let i = 0; i <inputText.english.length; i++)
+//     {    console.log(inputText.english)
+//         // checking if character is vowel,
+       
+//         if (inputText.english.charAt(i) === 'a' || inputText.english.charAt(i)=== 'e' ||
+//         inputText.english.charAt(i) === 'i' || inputText.english.charAt(i) === 'o' ||
+//         inputText.english.charAt(i) === 'u')
+//         {
+//             res = res +inputText.english.charAt(i);
+//         }
          
-        // if space then append as it is
-        else if(translateText.english.charAt(i) === ' ')
-        {
-            res = res +translateText.english.charAt(i);
-        }
+//         // if space then append as it is
+//         else if(inputText.english.charAt(i) === ' ')
+//         {
+//             res = res +inputText.english.charAt(i);
+//         }
          
-        // else double the consonant and
-        // put o in between
-        else
-        {
-            res = res + translateText.english.charAt(i) + 'o' +translateText.english.charAt(i);
-        }
-    }
+//         // else double the consonant and
+//         // put o in between
+//         else
+//         {
+//             res = res + inputText.english.charAt(i) + 'o' +inputText.english.charAt(i);
+//         }
+//     }
      
-    // return translated String
-    setRoverspraket(res)
-}
-console.log(roverspraket)
+//     // return translated String
+//     setRoverspraket(res)
+// }
+// console.log(roverspraket)
 
     
    
